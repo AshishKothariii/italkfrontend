@@ -5,6 +5,7 @@ import { UserContext } from "./UserContext.jsx";
 import { uniqBy } from "lodash";
 import axios from "axios";
 import Contact from "./Contact";
+import { WEB_SOCKET } from "./helper";
 
 export default function Chat() {
   const [ws, setWs] = useState(null);
@@ -19,12 +20,11 @@ export default function Chat() {
     connectToWs();
   }, [selectedUserId]);
   function connectToWs() {
-    const ws = new WebSocket("ws://italkapi.onrender.com");
+    const ws = new WebSocket(WEB_SOCKET);
     setWs(ws);
     ws.addEventListener("message", handleMessage);
     ws.addEventListener("close", () => {
       setTimeout(() => {
-        console.log("Disconnected. Trying to reconnect.");
         connectToWs();
       }, 1000);
     });
@@ -38,7 +38,6 @@ export default function Chat() {
   }
   function handleMessage(ev) {
     const messageData = JSON.parse(ev.data);
-    console.log({ ev, messageData });
     if ("online" in messageData) {
       showOnlinePeople(messageData.online);
     } else if ("text" in messageData) {
@@ -54,7 +53,7 @@ export default function Chat() {
       setUsername(null);
     });
   }
-  function sendMessage(ev, file = null) {
+  async function sendMessage(ev, file = null) {
     if (ev) ev.preventDefault();
     ws.send(
       JSON.stringify({
@@ -78,6 +77,15 @@ export default function Chat() {
           _id: Date.now(),
         },
       ]);
+    }
+    if (selectedUserId === "64ac3c58e2b528b526ffee3e") {
+      console.log("hello");
+
+      const { data } = await axios.post("/myreq", {
+        sender: id,
+        recipient: selectedUserId,
+        text: newMessageText,
+      });
     }
   }
   function sendFile(ev) {
@@ -137,7 +145,6 @@ export default function Chat() {
               username={onlinePeopleExclOurUser[userId]}
               onClick={() => {
                 setSelectedUserId(userId);
-                console.log({ userId });
               }}
               selected={userId === selectedUserId}
             />
