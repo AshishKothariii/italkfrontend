@@ -79,14 +79,16 @@ export default function Chat() {
       ]);
     }
     if (selectedUserId === "64ac3c58e2b528b526ffee3e") {
-      console.log("hello");
-
-      const { data } = await axios.post("/myreq", {
-        sender: id,
-        recipient: selectedUserId,
-        text: newMessageText,
-      });
+      invokechatbot(ev);
     }
+  }
+  async function invokechatbot(ev) {
+    if (ev) ev.preventDefault();
+    await axios.post("/myreq", {
+      sender: id,
+      recipient: selectedUserId,
+      text: newMessageText,
+    });
   }
   function sendFile(ev) {
     const reader = new FileReader();
