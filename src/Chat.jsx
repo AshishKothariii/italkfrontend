@@ -136,7 +136,7 @@ export default function Chat() {
 
   return (
     <div className="flex h-screen">
-      <div className=" w-1/3 flex flex-col" style={{ background: "#abec" }}>
+      <div className="w-1/3 flex flex-col overflow-y-auto">
         <div className="flex-grow">
           <Logo />
           {Object.keys(onlinePeopleExclOurUser).map((userId) => (
@@ -163,7 +163,7 @@ export default function Chat() {
           ))}
         </div>
         <div className="p-2 text-center flex items-center justify-center">
-          <span className="mr-2 text-sm text-gray-600 flex items-center">
+          <span className="mr-2 text-sm text--600 flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -186,11 +186,14 @@ export default function Chat() {
           </button>
         </div>
       </div>
-      <div className="flex flex-col bg-blue-50 w-2/3 p-2">
+      <div
+        className="w-2/3 p-2 flex flex-col items-stretch"
+        style={{ background: "#36393e" }}
+      >
         <div className="flex-grow">
           {!selectedUserId && (
             <div className="flex h-full flex-grow items-center justify-center">
-              <div className="text-gray-300">
+              <div className="text-gray-300" style={{ fontSize: "40px" }}>
                 &larr; Select a person from the sidebar
               </div>
             </div>
@@ -260,7 +263,7 @@ export default function Chat() {
               onChange={(ev) => setNewMessageText(ev.target.value)}
               placeholder="Type your message here"
               className="flex-grow border rounded-sm p-2"
-              style={{ background: "#36393e", color: "#ffffff" }}
+              style={{ background: "#36393e", color: "white" }}
             />
             <label className="bg-blue-200 p-2 text-gray-600 cursor-pointer rounded-sm border border-blue-200">
               <input type="file" className="hidden" onChange={sendFile} />
